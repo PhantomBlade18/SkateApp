@@ -22,6 +22,7 @@ function initMap() {
     });
 
     geocoder = new google.maps.Geocoder();
+    test()
 }
 
 function getPosition() {
@@ -47,4 +48,8 @@ function getAddress() {
             alert("Geocode was not succeessful. Reason: " + status);
         }
     });
+}
+
+function test() {
+    $('#search').trigger('click');
 }

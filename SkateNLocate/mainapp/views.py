@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.template import loader
+from django.http import HttpResponse,JsonResponse 
 from mainapp.models import Rating,Location,Member
 from mainapp.serializers import MemberSerializer
 from sklearn.metrics import euclidean_distances
@@ -17,15 +18,15 @@ def index(request):
     locs = Location.objects.all() 
     df = read_frame(locs)
     
-    print(df.to_string())
+    #print(df.to_string())
     
     mem = Member.objects.get(pk=1)
 
     me = MemberSerializer(mem).data
 
-    print(get_skate_recommendations(df,me).to_string())
+    #print(get_skate_recommendations(df,me).to_string())
     
-    return HttpResponse("Hello World")
+    return render(request,'mainapp/home.html')
 
 
 
@@ -47,6 +48,7 @@ def get_skate_recommendations(df: pd.DataFrame, user_features: dict) -> pd.DataF
 
     df_user = pd.DataFrame([user_features])
     df_features = pd.concat([df_user, df_features], sort=False)
+    df_features = normalize_features(df_features)
     
     # compute the distances
     X = df_features.values

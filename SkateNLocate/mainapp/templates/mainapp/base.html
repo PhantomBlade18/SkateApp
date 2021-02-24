@@ -1,11 +1,31 @@
-﻿<!DOCTYPE html>
+﻿{% load static %}
 
+<!DOCTYPE html>
+<!--<link rel="stylesheet" type="text/css" href="{% static 'mainapp/styles.css' %}" />
+
+    -->
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Homepage</title>
 </head>
 <body>
-    <iframe src="https://www.google.com/maps/d/u/0/embed?mid=18vn5w8rFAjmKemLw4slJ7Mji8tQISMAB" width="640" height="480"></iframe>
+    {% block content %}
+
+    {% endblock%}
 </body>
+
 </html>
+
+<script src="{% static 'mainapp/scripts.js' %}"></script>

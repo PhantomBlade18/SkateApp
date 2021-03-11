@@ -3,7 +3,8 @@ $(document).ready(initMap)
 var lat = 0
 var lng = 0
 var map
-var geocoder 
+var geocoder
+var ran
 
 function initMap() {
     // The location of Uluru
@@ -53,10 +54,10 @@ function findAddress() {
 
 //function translates stored lat long coordinates into an address to help the user find park
 function geoCodeAddress(latlng) {
-    geocoder.geocode({ location: latlng}, (results, status) => {
+     geocoder.geocode({ location: latlng}, (results, status) => {
         if (status === 'OK') {
             console.log(results[0])
-            return results[0].formatted_address;
+            ran = results[0].formatted_address;
         }
         else {
             console.log("Geocode was not succeessful. Reason: " + status);
@@ -84,15 +85,18 @@ $('#nearMe').click(function(){
                 },
                 success: function (data) {
                     var obj = JSON.parse(data)
-                    console.log("boop");
+                    
                     console.log(obj[0])
                     for (s in obj) {
                         console.log(obj[s].name)
                         text = '<div id="' + obj[s].id + '" class="skatepark">'
                         text += '<h3>' + obj[s].name + '</h3>'
-                        latlng = { lat: parseFloat(obj[s].lat), lng: parseFloat(obj[s].long) }
-                        add = geoCodeAddress(latlng)
-                        text += '<p id= "address-line">' + +'</p>'
+                        text += '<input type="number" id="lat" hidden value=' + obj[s].lat + ' ><input type="number" id="lng" hidden value=' + obj[s].long +'>'
+                        text += '<p id = "popularityScore">Popularity: ' + obj[s].avgPopularity + '</p>'
+                        text += '<p id = "avgScore">Average: ' + obj[s].avgRating + '</p>'
+                        text += '<p id = "SurfaceScore">Surface: ' + obj[s].avgSurface + '</p>'
+                        text += '<button class="showMe"> Show me </button>'
+                        text += '<button class="rateMe"> Rate </button>'
                         text += '</div>'
                         $('#skateparks-list').append(text)
 
@@ -113,3 +117,13 @@ function test() {
     $('#search').trigger('click');
 }
 
+$('#skateparks-list').on('click','.showMe',function () {
+    var id = $(this).parent().attr("id")
+    //$(this).sibling("lat").val
+    //$(this).sibling("lng").val
+
+    latlng = { lat: parseFloat($(this).siblings("#lat").val()), lng: parseFloat($(this).siblings("#lng").val()) }
+    console.log(latlng)
+    map.setCenter(latlng)
+
+})

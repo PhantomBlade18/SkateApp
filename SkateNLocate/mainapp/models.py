@@ -19,8 +19,13 @@ class Location(models.Model):
 
 
     def __str__(self):
-        x = "Name: "+self.name+ "Long: "+ str(self.long)+" Lat: "+ str(self.lat)+ " Overall Rating: " +str(self.avgRating) + " Surface Rating: " +str(self.avgSurface )+ " Popularity Rating: " +str(self.avgPopularity) +  "\n"
-        return x  
+        x = "Name: "+self.name+ " Lat: "+ str(self.lat)+" Long: "+ str(self.long)+ " Overall Rating: " +str(self.avgRating) + " Surface Rating: " +str(self.avgSurface )+ " Popularity Rating: " +str(self.avgPopularity) +  "\n"
+        return x
+    
+    def switch(self):
+        a = self.long
+        self.long = self.lat
+        self.lat = a
 
 class Member(User):
 

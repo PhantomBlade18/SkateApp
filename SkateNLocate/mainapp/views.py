@@ -15,6 +15,66 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import euclidean_distances
 
+def loggedin(view):
+    ''' Decorator that tests whether user is logged in '''
+    def mod_view(request):
+        if 'username' in request.session:
+            username = request.session['username']
+            try: user = Member.objects.get(username=username)
+            except Member.DoesNotExist: raise Http404('Member does not exist')
+            return view(request, user)
+        else:
+            return render(request,'mainapp/login.html')
+    return mod_view
+
+def registerUserView(request): 
+    ''' adds new user to the database '''
+    if 'username' and 'password' and 'email' and 'dob' in request.POST:
+        u = request.POST['username']
+        p = request.POST['password']
+        e = request.POST['email']
+        d = request.POST['dob']
+        user = Member(username = u, email = e, DOB = d)
+        user.set_password(p)
+        try: user.save()
+        except IntegrityError: raise Http404('Username ' +u+' already taken: Usernames must be unique')
+        context = {
+            'username' : u,
+            'loggedin': True
+        }
+        return render(request,'mainapp/index.html',context)
+
+    else:
+        raise Http404('POST data missing')
+
+def login(request):
+    if  request.method == 'GET':
+        return render(request,'mainapp/login.html')
+    elif not ('username' in request.POST and 'password' in request.POST) and request.method == 'POST':
+        context = {
+            'msg': "Please enter the username and password"
+            }
+        data = json.dumps(context)
+        return JsonResponse(data)
+    else:
+        username = request.POST['username']
+        password = request.POST['password']
+        try: member = Member.objects.get(username=username)
+        except Member.DoesNotExist: raise Http404('User does not exist')
+        if member.check_password(password):
+            # remember user in session variable
+            request.session['username'] = username
+            request.session['password'] = password
+            context = {'user': member ,'loggedin': True}
+            return render(request, 'mainapp/index.html', context)
+        else:
+            raise Http404("Username or Password is Incorrect")
+
+@loggedin
+def logout(request, user):
+    request.session.flush()
+    return render(request,'mainapp/index.html', context)
+
 # Create your views here.
 def index(request):
     locs = Location.objects.all() 
@@ -31,7 +91,7 @@ def index(request):
     locs = Location.objects.all() 
     df = read_frame(locs)
     loc = (51.548600,-0.367310)
-    df['distance'] = df.apply(lambda row:distance.distance(loc,(row.long,row.lat)),axis = 1)
+    df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
     print(df.to_string())
     #return HttpResponse("Hello World")
 
@@ -47,7 +107,7 @@ def index(request):
     print(df.to_string())
     return HttpResponse("Hello World") """
 
-def getRecommendations(request):
+def getNearestSkateparks(request):
     if request.method == 'POST':
         print("Howdy")
         if 'lat' and 'lng' in request.POST:
@@ -58,11 +118,14 @@ def getRecommendations(request):
             loc = (request.POST['lat'],request.POST['lng'])
             locs = Location.objects.all()
             df = read_frame(locs)
-            df['distance'] = df.apply(lambda row:distance.distance(loc,(row.long,row.lat)),axis = 1)
+            df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
+            df = df[df['distance']<= 20]
             print(df.to_string())
             context = df.to_json(orient = "records")
             return JsonResponse(context, safe = False)
             print("Return not performed")
+
+
         
             
             
@@ -96,3 +159,6 @@ def normalize_features(df):
         df[col] = df[col].fillna(df[col].mean())
         df[col] = StandardScaler().fit_transform(df[col].values.reshape(-1, 1))
     return df
+
+def signup(request):
+    return render(request,'mainapp/register.html')

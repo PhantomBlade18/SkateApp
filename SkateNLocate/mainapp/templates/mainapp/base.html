@@ -21,6 +21,40 @@
     <title>Homepage</title>
 </head>
 <body>
+    <nav>
+        <div id="container">
+            <ul class="navbar">
+                {%if loggedin%}
+                <li class="nav-item">
+                    <p class="nav-link" href="">Welcome {{user.username}}</p>
+                </li>
+                {%else%}
+                {%endif%}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}" id="home">Home</a>
+                </li>
+
+                {%if loggedin%}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'myRecommendations' %}">My recommendations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %} " id="logoutButton">Log out</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'viewProfile' %}">Profile</a>
+                </li>
+                {%else%}
+                <li class="nav-item">
+                    <a class="nav-link" id="signUpButton" name="signup" href="{% url 'signup' %}">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="loginButton" name="login" href="{% url 'login' %}">Login</a>
+                </li>
+                {%endif%}
+            </ul>
+        </div>
+    </nav>
     {% block content %}
 
     {% endblock%}

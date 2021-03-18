@@ -23,7 +23,7 @@ function initMap() {
     });
 
     geocoder = new google.maps.Geocoder();
-    
+    $('#nearMe').trigger('click');
 }
 
 function getPosition() {
@@ -85,7 +85,7 @@ $('#nearMe').click(function(){
                 },
                 success: function (data) {
                     var obj = JSON.parse(data)
-                    
+                    $('#skatepark-list').empty()
                     console.log(obj[0])
                     for (s in obj) {
                         console.log(obj[s].name)
@@ -95,6 +95,7 @@ $('#nearMe').click(function(){
                         text += '<p id = "popularityScore">Popularity: ' + obj[s].avgPopularity + '</p>'
                         text += '<p id = "avgScore">Average: ' + obj[s].avgRating + '</p>'
                         text += '<p id = "SurfaceScore">Surface: ' + obj[s].avgSurface + '</p>'
+                        text += '<p id = "distance">Distance : ' + obj[s].distance.toFixed(2) + ' km</p>'
                         text += '<button class="showMe"> Show me </button>'
                         text += '<button class="rateMe"> Rate </button>'
                         text += '</div>'

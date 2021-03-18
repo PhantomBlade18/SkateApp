@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.template import loader
-from django.http import HttpResponse,JsonResponse 
+from django.http import HttpResponse,JsonResponse ,Http404
 from mainapp.models import Rating,Location,Member
 from mainapp.serializers import MemberSerializer
 from sklearn.metrics import euclidean_distances
@@ -42,7 +42,7 @@ def registerUserView(request):
             'username' : u,
             'loggedin': True
         }
-        return render(request,'mainapp/index.html',context)
+        return render(request,'mainapp/home.html',context)
 
     else:
         raise Http404('POST data missing')
@@ -65,40 +65,23 @@ def login(request):
             # remember user in session variable
             request.session['username'] = username
             request.session['password'] = password
+            request.session['loggedin'] = True
             context = {'user': member ,'loggedin': True}
-            return render(request, 'mainapp/index.html', context)
+            return render(request, 'mainapp/home.html', context)
         else:
             raise Http404("Username or Password is Incorrect")
 
 @loggedin
 def logout(request, user):
     request.session.flush()
-    return render(request,'mainapp/index.html', context)
+    return render(request,'mainapp/home.html')
 
 # Create your views here.
 def index(request):
-    locs = Location.objects.all() 
-    df = read_frame(locs)
-    
-    #print(df.to_string())
-    
-    mem = Member.objects.get(pk=1)
-
-    me = MemberSerializer(mem).data
-
-    #print(get_skate_recommendations(df,me).to_string())
-    
-    locs = Location.objects.all() 
-    df = read_frame(locs)
-    loc = (51.548600,-0.367310)
-    df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
-    print(df.to_string())
-    #return HttpResponse("Hello World")
-
     return render(request,'mainapp/home.html')
 
-
-
+def viewProfile(request):
+    return render(request,'mainapp/home.html')
 
     #Basic test to see whether Pandas Works with Django (SPOILER: IT DOES)
     """   locs = Location.objects.all() 
@@ -162,3 +145,23 @@ def normalize_features(df):
 
 def signup(request):
     return render(request,'mainapp/register.html')
+
+
+def spare(): #Code for algo
+    locs = Location.objects.all() 
+    df = read_frame(locs)
+    
+    #print(df.to_string())
+    
+    mem = Member.objects.get(pk=1)
+
+    me = MemberSerializer(mem).data
+
+    #print(get_skate_recommendations(df,me).to_string())
+    
+    locs = Location.objects.all() 
+    df = read_frame(locs)
+    loc = (51.548600,-0.367310)
+    df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
+    print(df.to_string())
+    #return HttpResponse("Hello World")

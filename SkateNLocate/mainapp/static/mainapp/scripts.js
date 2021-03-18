@@ -85,7 +85,7 @@ $('#nearMe').click(function(){
                 },
                 success: function (data) {
                     var obj = JSON.parse(data)
-                    $('#skatepark-list').empty()
+                    $('#skateparks-list').empty()
                     console.log(obj[0])
                     for (s in obj) {
                         console.log(obj[s].name)

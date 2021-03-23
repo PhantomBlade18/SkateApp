@@ -4,14 +4,15 @@
     <h1>This is where Main starts</h1>
     {%include "mainapp/map.html"%}
 
-    <input type="text" id="address" value="" /> <button id="search">Search</button>
-    <p>Hello There!</p>
-    <p>GENERAL KENOBI?!?</p>
     {% csrf_token %}
-    <button id="nearMe">Near Me</button>
-    <h2>Nearby Skateparks:</h2>
+    <p> You are currently viewing:</p>
+    <div id="focused-park">
+        <p> You are currently viewing:</p>
+
+    </div>
+    <h2>Skatepark List:</h2>
     <div id="skateparks-list">
-        
+
     </div>
 </div>
 {% endblock %}

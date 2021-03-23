@@ -7,7 +7,7 @@ var geocoder
 var ran
 
 function initMap() {
-    // The location of Uluru
+    // The location
     pos = { lat: 25, lng: 36 }
 
     const uluru = { lat: -24.344, lng: 132.036 };
@@ -84,7 +84,8 @@ $('#nearMe').click(function(){
                     lng: pos.lng,
                 },
                 success: function (data) {
-                    var obj = JSON.parse(data)
+                    var obj = JSON.parse(data["skateparks"])
+                    var log = data["loggedin"]
                     $('#skateparks-list').empty()
                     console.log(obj[0])
                     for (s in obj) {
@@ -97,11 +98,41 @@ $('#nearMe').click(function(){
                         text += '<p id = "SurfaceScore">Surface: ' + obj[s].avgSurface + '</p>'
                         text += '<p id = "distance">Distance : ' + obj[s].distance.toFixed(2) + ' km</p>'
                         text += '<button class="showMe"> Show me </button>'
-                        text += '<button class="rateMe"> Rate </button>'
+                        if (log == true) {
+                            text += '<button class="rateMe"> Rate </button>'
+                            text += '<div class="rate-Form"> <div>'
+                            text += '<label for="overall">Overall Score:</label>'
+                            text += '<select id="overall" name="overall">'
+                            text += '<option value="5">5-Great</option>'
+                            text += '<option value="4">4-Good</option>'
+                            text += '<option value="3">3-Average</option>'
+                            text += '<option value="2">2-Bad</option>'
+                            text += '<option value="1">1-Horrible</option>'
+                            text += '</select>'
+                            text += '<label for="popularity">Crowd Level:</label>'
+                            text += '<select id="popularity" name="popularity">'
+                            text += '<option value="5">5-Quiet</option>'
+                            text += '<option value="4">4-A few Skaters</option>'
+                            text += '<option value="3">3-Moderate</option>'
+                            text += '<option value="2">2-Busy</option>'
+                            text += '<option value="1">1-Very Crowded</option>'
+                            text += '</select>'
+                            text += '<label for="surface">Surface Quality:</label>'
+                            text += '<select id="surface" name="surface">'
+                            text += '<option value="5">5-Great</option>'
+                            text += '<option value="4">4-Good</option>'
+                            text += '<option value="3">3-Average</option>'
+                            text += '<option value="2">2-Bad</option>'
+                            text += '<option value="1">1-Horrible</option>'
+                            text += '</select>'
+                            text += '<button class="submitRating">Submit Rating </button>'
+                        }
+                        
                         text += '</div>'
                         $('#skateparks-list').append(text)
 
                     }
+                    $('.rate-form').hide();
                 }
             })
         })
@@ -119,6 +150,17 @@ function test() {
 }
 
 $('#skateparks-list').on('click','.showMe',function () {
+    var id = $(this).parent().attr("id")
+    //$(this).sibling("lat").val
+    //$(this).sibling("lng").val
+
+    latlng = { lat: parseFloat($(this).siblings("#lat").val()), lng: parseFloat($(this).siblings("#lng").val()) }
+    console.log(latlng)
+    map.setCenter(latlng)
+
+})
+
+$('#skateparks-list').on('click', '.example', function () {
     var id = $(this).parent().attr("id")
     //$(this).sibling("lat").val
     //$(this).sibling("lng").val

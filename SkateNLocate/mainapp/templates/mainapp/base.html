@@ -39,11 +39,12 @@
                     <a class="nav-link" href="{% url 'myRecommendations' %}">My recommendations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %} " id="logoutButton">Log out</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{% url 'viewProfile' %}">Profile</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %} " id="logoutButton">Log out</a>
+                </li>
+
                 {%else%}
                 <li class="nav-item">
                     <a class="nav-link" id="signUpButton" name="signup" href="{% url 'signup' %}">Sign Up</a>

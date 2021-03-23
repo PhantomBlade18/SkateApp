@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
-from django.http import HttpResponse,JsonResponse ,Http404
+from django.http import HttpResponse,JsonResponse ,Http404, HttpResponseRedirect
+from django.urls import reverse
 from mainapp.models import Rating,Location,Member
 from mainapp.serializers import MemberSerializer
 from sklearn.metrics import euclidean_distances
@@ -71,14 +72,14 @@ def login(request):
             request.session['password'] = password
             request.session['loggedin'] = True
             context = {'user': member ,'loggedin': True}
-            return render(request, 'mainapp/home.html', context)
+            return HttpResponseRedirect(reverse('index'))
         else:
             raise Http404("Username or Password is Incorrect")
 
 @loggedin
 def logout(request, user):
     request.session.flush()
-    return render(request,'mainapp/home.html')
+    return HttpResponseRedirect(reverse('index'))
 
 # Create your views here.
 def index(request):
@@ -110,10 +111,13 @@ def getNearestSkateparks(request):
             loc = (request.POST['lat'],request.POST['lng'])
             locs = Location.objects.all()
             df = read_frame(locs)
-            df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long),ellipsoid='WGS-80').km,axis = 1)
+            df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long),ellipsoid='WGS-84').km,axis = 1)
             df = df[df['distance']<= 20]
             print(df.to_string())
-            context = df.to_json(orient = "records")
+            if 'username' in request.session:
+                context = { 'loggedin':True,'skateparks':df.to_json(orient = "records")}
+            else:
+                context = { 'loggedin':False,'skateparks':df.to_json(orient = "records")}
             return JsonResponse(context, safe = False)
             print("Return not performed")
 

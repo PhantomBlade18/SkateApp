@@ -1,66 +1,56 @@
 ﻿{% load static %}
 
 <!DOCTYPE html>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'mainapp/styles.css' %}" />
-
-    -->
+<!--<link rel="stylesheet" type="text/css" href="{% static 'mainapp/styles.css' %}" />-->
+<!-- Bootstrap Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<!-- Popper JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Homepage</title>
 </head>
 <body>
-    <nav>
-        <div id="container">
-            <ul class="navbar">
-                {%if loggedin%}
-                <li class="nav-item">
-                    <p class="nav-link" href="">Welcome {{user.username}}</p>
-                </li>
-                {%else%}
-                {%endif%}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}" id="home">Home</a>
-                </li>
+    <div id="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Skate and Locate</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="{% url 'index' %}">Home </a>
+                    {%if loggedin%}
+                    <a class="nav-item nav-link" href="{% url 'myRecommendations' %}">My Recommendations</a>
+                    <a class="nav-item nav-link" href="{% url 'viewProfile' %}">My Profile</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %} ">Log out</a>
 
-                {%if loggedin%}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'myRecommendations' %}">My recommendations</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'viewProfile' %}">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %} " id="logoutButton">Log out</a>
-                </li>
-
-                {%else%}
-                <li class="nav-item">
-                    <a class="nav-link" id="signUpButton" name="signup" href="{% url 'signup' %}">Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="loginButton" name="login" href="{% url 'login' %}">Login</a>
-                </li>
-                {%endif%}
-            </ul>
+                    {%else%}
+                    <a class="nav-item nav-link" href="{% url 'signup' %}">Sign Up</a>
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Log in</a>
+                    {%endif%}
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div id="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                {% block content %}
+                {% endblock%}
+            </div>
+            <div class="col-md-2"></div>
         </div>
-    </nav>
-    {% block content %}
-
-    {% endblock%}
+    </div>
 </body>
-
 </html>
 
 <script src="{% static 'mainapp/scripts.js' %}"></script>

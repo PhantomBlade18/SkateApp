@@ -6,16 +6,24 @@
         #map {
             height: 400px;
             /* The height is 400 pixels */
-            width: 50%;
+            width: 75%;
             /* The width is the width of the web page */
         }
     </style>
-    <input type="text" id="address" value="" /> <button id="search">Search</button>
-    <button id="nearMe">Near Me</button>
-    <div id="map">
+    <div class="row">
+        <div class="col-md-6">
+            <input type="text" id="address" value="" class="form-control" />
+        </div>
+            <button id="search" class="btn btn-primary">Search</button>
 
+            <button id="nearMe" class="btn btn-primary">Near Me</button>
+        
+    </div> 
+    <div id="container">
+        <div id="map">
+
+        </div>
     </div>
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAp71tY4sHl9VYLtpd3PPnS7QzQ2TqGVAE&callback=initMap&libraries=&v=weekly" async></script>
 </div>
 

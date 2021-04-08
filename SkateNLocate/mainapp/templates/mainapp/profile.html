@@ -1,0 +1,76 @@
+{% extends "mainapp/base.html"%}
+{% load static %}
+
+{% block content %}
+
+
+
+<div class="container">
+    {% if user %}
+    <div class="main-body">
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Username</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">
+                {{user.username}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Email</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">
+                {{user.email}}
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body" id="updateEmail">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0" id="straight">Update Email</h6>
+                    </div>
+                </div>
+                <hr>
+                <form id='updateEmail' method='POST' action=""><!--{ url 'updateEmail' } -->
+                    {% csrf_token %}
+                    <input type="email" id="email" name="email" value="{{user.email}}">
+                    <br>
+                    <br>
+                    <button class="btn btn-secondary btn-sm" id="ChangeEmail" type='button'>Submit </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body" id="update Password">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0" id="straight">Update Password</h6>
+                    </div>
+                </div>
+                <hr>
+                <form id='updatePassword' method='POST' action=""> <!-- { url 'updatePassword'%} -->
+                    {% csrf_token %}
+                    <h6 class="mb-0"><label for="loginPassf">Current Password</label></h6>
+                    <input type="password" class="form-control" id="loginPass" name="currentPassword">
+                    <br>
+                    <h6 class="mb-0"><label for="loginPassf">New Password</label></h6>
+                    <input type="password" class="form-control" id="loginPass" name="newPassword">
+                    <br>
+                    <button class="btn btn-secondary btn-sm" id="ChangePassword" type='button'>Submit </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>User does not exist</p>
+    {% endif %}
+    {% endblock %}
+    </div>
+
+
+
+

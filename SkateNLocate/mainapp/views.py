@@ -90,8 +90,11 @@ def index(request):
     else:
         return render(request,'mainapp/home.html')
 
-def viewProfile(request):
-    return render(request,'mainapp/home.html')
+@loggedin
+def viewProfile(request, user):
+    username = request.session['username']
+    context = {'user': user, 'loggedin': True}
+    return render(request, 'mainapp/profile.html', context)
 
     #Basic test to see whether Pandas Works with Django (SPOILER: IT DOES)
     """   locs = Location.objects.all() 
@@ -121,8 +124,49 @@ def getNearestSkateparks(request):
             return JsonResponse(context, safe = False)
             print("Return not performed")
 
+@loggedin
+def submitRating(request,user):
+    if request.method == 'POST':
+        if 'id' and 'avg' and 'sur' and 'pop' in request.POST:
+            loc = Location.objects.get(pk=request.POST['id'])
+            a = request.POST['avg']
+            s = request.POST['sur']
+            p = request.POST['pop']
+            try: rating = Rating.objects.get(author = user, location = loc)
+            except Rating.DoesNotExist:
+                rating = Rating(author = user, location= loc, overall =a,surface=s,popularity=p)
+                rating.save()
+                loc.calcRating()
+                user.calcRating()
+                user.save()
+                loc.save()
+                context = {'successful': True , 'msg': "Thank you for rating "+loc.name+"!"}
+                return JsonResponse(context,safe = False)
+            else:
+                a = request.POST['avg']
+                s = request.POST['sur']
+                p = request.POST['pop']
+                rating.overall = a
+                rating.surface = s
+                rating.popularity = p
+                rating.save()
+                loc.calcRating()
+                user.calcRating()
+                loc.save()
+                user.save()
+                
+                context = {'successful': True , 'msg': "Rating for "+loc.name+" has been updated. Thank you!"}
+                return JsonResponse(context,safe = False)
+        else:
+            print("Missing something in post")
+    else:
+        print("Wrong Method: ",request.method)
 
 
+
+def getRecommendations(request):
+    #To Be Implemented
+    print("Hello")
 
 def spare(): #Code for algo
     locs = Location.objects.all() 

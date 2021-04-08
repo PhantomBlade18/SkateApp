@@ -3,20 +3,22 @@
 
 
 {% block content %}
-<form id ="loginForm" method="POST" action="{% url 'login' %}">
-    {% csrf_token %}
-    <div id="msg">
+<div id="container" class="">
+    <form id ="loginForm" method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div id="msg">
 
-    </div>
-    <div class="form-group">
-        <label id="usernamef"  for="username">Username</label>
-        <input id="loginMember" type="text" class="form-control" name="username">
-    </div>
-    <div class="form-group">
-        <label for="loginPassf">Password</label>
-        <input type="password" class="form-control" id="loginPass" name="password">
-    </div>
-    <button type="submit" id="loginButton">Log in</button>
-</form>
+        </div>
+        <div class="form-group">
+            <label id="usernamef"  for="username">Username</label>
+            <input id="loginMember" type="text" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+            <label for="loginPassf">Password</label>
+            <input type="password" class="form-control" id="loginPass" name="password">
+        </div>
+        <button type="submit" id="loginButton"  class="btn btn-primary">Log in</button>
+    </form>
+</div> 
 
 {% endblock %}

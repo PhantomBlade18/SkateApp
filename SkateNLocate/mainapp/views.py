@@ -186,3 +186,5 @@ def spare(): #Code for algo
     df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
     print(df.to_string())
     #return HttpResponse("Hello World")
+
+    #Boop

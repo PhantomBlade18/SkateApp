@@ -6,7 +6,7 @@ from sklearn.metrics import euclidean_distances
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 def get_skate_recommendations(df: pd.DataFrame, user_features: dict) -> pd.DataFrame: #ensures a pandas dataframe is returned. we pass the original df and the target anchor(who we compare against)
-    features = ['avgRating','avgSurface','avgPopularity'] #list of features that are used to compute similarity between the users average ratings  and the skate parks average
+    features = ['ramps','indoor','paid','cruising','asphalt','concrete','wood','skateType'] #list of features that are used to compute similarity between the users average ratings  and the skate parks average
     
 
     #create the features in a seperate frame

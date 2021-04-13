@@ -13,6 +13,14 @@ class LocationSerializer(serializers.ModelSerializer):
    'avgRating',
    'avgSurface',
    'avgPopularity',
+   'ramps',
+   'indoor',
+   'paid',
+   'cruising',
+   'asphalt',
+   'concrete',
+   'wood',
+   'skateType',
   ]
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -23,6 +31,14 @@ class MemberSerializer(serializers.ModelSerializer):
    'avgRating',
    'avgSurface',
    'avgPopularity',
+   'ramps',
+   'indoor',
+   'paid',
+   'cruising',
+   'asphalt',
+   'concrete',
+   'wood',
+   'skateType',
   ]
 
 class RatingSerializer(serializers.ModelSerializer):

@@ -86,8 +86,10 @@ def index(request):
     if 'username' in request.session:
         user = Member.objects.get(username = request.session['username'])
         context = {'user': user ,'loggedin': True}
+        spare() #quick test
         return render(request,'mainapp/home.html',context)
     else:
+        spare()
         return render(request,'mainapp/home.html')
 
 @loggedin
@@ -96,12 +98,6 @@ def viewProfile(request, user):
     context = {'user': user, 'loggedin': True}
     return render(request, 'mainapp/profile.html', context)
 
-    #Basic test to see whether Pandas Works with Django (SPOILER: IT DOES)
-    """   locs = Location.objects.all() 
-    df = read_frame(locs)
-    df['distance'] = distance.distance(loc,(df['long'],df['lat']))
-    print(df.to_string())
-    return HttpResponse("Hello World") """
 
 def getNearestSkateparks(request):
     if request.method == 'POST':
@@ -163,10 +159,23 @@ def submitRating(request,user):
         print("Wrong Method: ",request.method)
 
 
-
-def getRecommendations(request):
-    #To Be Implemented
-    print("Hello")
+@loggedin
+def getRecommendations(request,user):
+    locs = Location.objects.all() 
+    df = read_frame(locs)
+    me = MemberSerializer(user).data
+    #print(get_skate_recommendations(df,me).to_string())
+    locs = Location.objects.all() 
+    df = read_frame(locs)
+    loc = (request.POST['lat'],request.POST['lng'])
+    df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
+    df = df[df['distance']<= 20]
+    if 'username' in request.session:
+        context = { 'loggedin':True,'skateparks':df.to_json(orient = "records")}
+    else:
+        context = { 'loggedin':False,'skateparks':df.to_json(orient = "records")}
+    return JsonResponse(context, safe = False)
+    print(df.to_string())
 
 def spare(): #Code for algo
     locs = Location.objects.all() 
@@ -175,7 +184,7 @@ def spare(): #Code for algo
     #print(df.to_string())
     
     mem = Member.objects.get(pk=1)
-
+    print(mem)
     me = MemberSerializer(mem).data
 
     print(get_skate_recommendations(df,me).to_string())
@@ -184,6 +193,7 @@ def spare(): #Code for algo
     df = read_frame(locs)
     loc = (51.548600,-0.367310)
     df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
+
     print(df.to_string())
     #return HttpResponse("Hello World")
 

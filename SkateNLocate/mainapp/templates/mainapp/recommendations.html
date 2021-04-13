@@ -1,0 +1,17 @@
+﻿{% extends "mainapp/base.html"%}
+{% block content %}
+<div id="main">
+    <h1>This is where Main starts</h1>
+    {%include "mainapp/map.html"%}
+
+    {% csrf_token %}
+    <p> You are currently viewing:</p>
+    <div id="focused-park">
+
+    </div>
+    <h2>Skatepark List:</h2>
+    <div id="skateparks-list">
+
+    </div>
+</div>
+{% endblock %}

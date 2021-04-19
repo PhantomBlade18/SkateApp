@@ -83,7 +83,7 @@
                 <form id='updatePrefs' method='POST' action="">
                     {% csrf_token %}
                     <h6 class="mb-0" id="straight">Skateboard type:</h6>
-                    <select name="board">
+                    <select class="custom-select" name="board">
                         {%if user.skateType == 2 %}
                         <option value="2" selected>Any</option>
                         <option value="1">Skateboard</option>

@@ -3,26 +3,114 @@
 
 
 {% block content %}
+
 <form method="POST" action="{% url 'registerUserView' %}">
     {% csrf_token %}
-    <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input id="registerEmail" type="email" class="form-control" name="email">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input id="registerEmail" type="email" class="form-control" name="email">
+            </div>
+            <div class="form-group">
+                <label id="username" for="username">Username</label>
+                <input id="registerMember" type="text" class="form-control" name="username">
+            </div>
+            <div class="form-group">
+                <label for="registerPass">Password</label>
+                <input type="password" class="form-control" id="registerPass" name="password">
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label id="username"  for="username">Username</label>
-        <input id="registerMember" type="text" class="form-control" name="username">
-    </div>
-    <div class="form-group">
-        <label for="registerPass">Password</label>
-        <input type="password" class="form-control" id="registerPass" name="password">
-    </div>
+    <br />
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="mb-0" id="straight">Select your skateboard preferences:</h6>
+            <hr />
+            <br />
+            <div class="form-group">
+                <h6 class="mb-0" id="straight">Skateboard type:</h6>
+                <select class="custom-select" name="board">
+                    <option value="2" selected>Any</option>
+                    <option value="1">Skateboard</option>
+                    <option value="3">Longboard</option>
+                </select>
 
-    <div class="form-group">
-        <label for="dob">Date of Birth: </label>
-        <input type="date" class="form-control" id="fdate" name="dob" />
+                <h6 class="mb-0" id="straight">Ramps</h6>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ramps" id="ry" value="1" checked>
+                    <label class="form-check-label" for="ry">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ramps" id="rn" value="0">
+                    <label class="form-check-label" for="rn">No</label>
+                </div>
+
+                <h6 class="mb-0" id="straight">Indoors</h6>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="indoor" id="iy" value="1" checked>
+                    <label for="iy">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="indoor" id="in" value="0">
+                    <label for="in">No</label>
+                </div>
+
+                <h6 class="mb-0" id="straight">Paid</h6>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="paid" id="py" value="1" checked>
+                    <label for="py">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="paid" id="pn" value="0">
+                    <label for="pn">No</label>
+                </div>
+
+                <h6 class="mb-0" id="straight">Cruising</h6>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="cruising" id="cry" value="1" checked>
+                    <label for="cry">Cruising</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="cruising" id="crnn" value="0">
+                    <label for="crn">Trick Practice</label>
+                </div>
+
+                <h6 class="mb-0" id="straight">Concrete</h6>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="concrete" id="cy" value="1" checked>
+                    <label for="cy">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="concrete" id="cn" value="0">
+                    <label for="cn">No</label>
+                </div>
+
+                <h6 class="mb-0" id="straight">Asphalt</h6>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="asphalt" id="ay" value="1" checked>
+                    <label for="ay">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="asphalt" id="an" value="0">
+                    <label for="an">No</label>
+                </div>
+
+                <h6 class="mb-0" id="straight">Wood</h6>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="wood" id="wy" value="1" checked>
+                    <label for="wy">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="wood" id="wn" value="0">
+                    <label for="wn">No</label>
+                </div>
+                <br />
+
+            </div>
+        </div>
     </div>
-    <button type="submit" id="registerSubmit"  class="btn btn-primary">Submit</button>
+    <button type="submit" id="registerSubmit" class="btn btn-primary">Submit</button>
 </form>
 
-{% endblock %}
+    {% endblock %}

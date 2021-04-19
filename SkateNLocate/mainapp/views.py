@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse,JsonResponse ,Http404, HttpResponseRedirect
 from django.urls import reverse
+from django.db import IntegrityError
 from mainapp.models import Rating,Location,Member
 from mainapp.serializers import MemberSerializer
 from sklearn.metrics import euclidean_distances
@@ -34,20 +35,27 @@ def signup(request):
 
 def registerUserView(request): 
     ''' adds new user to the database '''
-    if 'username' and 'password' and 'email' and 'dob' in request.POST:
+    if 'username' and 'password' and 'email' in request.POST:
         u = request.POST['username']
         p = request.POST['password']
         e = request.POST['email']
-        d = request.POST['dob']
-        user = Member(username = u, email = e, DOB = d)
+        ramps= int(request.POST['ramps'])
+        indoor=int(request.POST['indoor'])
+        paid=int(request.POST['paid'])
+        cruising=int(request.POST['cruising'])
+        asphalt=int(request.POST['asphalt'])
+        concrete=int(request.POST['concrete'])
+        wood=int(request.POST['wood'])
+        skateType=int(request.POST['board'])
+        user = Member(username = u, email = e, ramps = ramps,indoor = indoor,paid = paid,cruising = cruising,asphalt = asphalt,concrete = concrete ,wood = wood,skateType = skateType)
         user.set_password(p)
         try: user.save()
         except IntegrityError: raise Http404('Username ' +u+' already taken: Usernames must be unique')
-        context = {
-            'username' : u,
-            'loggedin': True
-        }
-        return render(request,'mainapp/home.html',context)
+        request.session['username'] = u
+        request.session['password'] = p
+        request.session['loggedin'] = True
+        context = {'user': u ,'loggedin': True}
+        return HttpResponseRedirect(reverse('index'))
 
     else:
         raise Http404('POST data missing')

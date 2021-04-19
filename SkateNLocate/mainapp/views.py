@@ -81,6 +81,51 @@ def logout(request, user):
     request.session.flush()
     return HttpResponseRedirect(reverse('index'))
 
+@loggedin
+def updateEmail(request, user):
+    if request.method == "POST":
+        email = request.POST['email']
+        user.email = email
+        user.save()
+        context = {'successful': True,'msg': "Email updated successfully"}
+        return JsonResponse(context, safe = False)
+    else:
+        raise Http404("Something went wrong.")
+
+@loggedin
+def updatePassword(request, user):
+    if request.method == "POST":
+        cpassword = request.POST['currentPassword']
+        npassword = request.POST['newPassword']
+        if user.check_password(cpassword):
+            user.set_password(npassword)
+            user.save()
+            context = {'successful': True , 'msg': "Password Updated Successfully!"}
+            return JsonResponse(context)
+        else:
+            context = {'successful': False , 'msg': "The current password is incorrect!"}
+            return JsonResponse(context)
+    else:
+        raise Http404("Something went wrong.")
+
+@loggedin
+def updatePrefs(request,user):
+    if request.method == "POST":
+            user.ramps= int(request.POST['ramps'])
+            user.indoor=int(request.POST['indoor'])
+            user.paid=int(request.POST['paid'])
+            user.cruising=int(request.POST['cruising'])
+            user.asphalt=int(request.POST['asphalt'])
+            user.concrete=int(request.POST['concrete'])
+            user.wood=int(request.POST['wood'])
+            user.skateType=int(request.POST['board'])
+            user.save()
+            context = {'successful': True , 'msg': "Preferences Updated Successfully!"}
+            return JsonResponse(context)
+        
+    else:
+        raise Http404("Invalid Request Type.")
+
 # Create your views here.
 def index(request):
     if 'username' in request.session:
@@ -91,6 +136,15 @@ def index(request):
     else:
         spare()
         return render(request,'mainapp/home.html')
+@loggedin
+def myRecommendations(request,user):
+    if 'username' in request.session:
+        context = {'user': user ,'loggedin': True}
+        spare() #quick test
+        return render(request,'mainapp/recommendations.html',context)
+    else:
+        spare()
+        return render(request,'mainapp/login.html')
 
 @loggedin
 def viewProfile(request, user):
@@ -167,13 +221,15 @@ def getRecommendations(request,user):
     #print(get_skate_recommendations(df,me).to_string())
     locs = Location.objects.all() 
     df = read_frame(locs)
+    print("This is  the latitude :", request.POST['lat'])
     loc = (request.POST['lat'],request.POST['lng'])
     df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
-    df = df[df['distance']<= 20]
+    #df = df[df['distance']<= 20]
     if 'username' in request.session:
         context = { 'loggedin':True,'skateparks':df.to_json(orient = "records")}
     else:
         context = { 'loggedin':False,'skateparks':df.to_json(orient = "records")}
+
     return JsonResponse(context, safe = False)
     print(df.to_string())
 

@@ -8,33 +8,39 @@
 <div class="container">
     {% if user %}
     <div class="main-body">
-        <div class="row">
-            <div class="col-sm-3">
-                <h6 class="mb-0">Username</h6>
-            </div>
-            <div class="col-sm-9 text-secondary">
-                {{user.username}}
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-3">
-                <h6 class="mb-0">Email</h6>
-            </div>
-            <div class="col-sm-9 text-secondary">
-                {{user.email}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Username: </h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {{user.username}}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Email: </h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary" id="display-email">
+                        {{user.email}}
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="card mb-3">
-            <div class="card-body" id="updateEmail">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-sm-3">
                         <h6 class="mb-0" id="straight">Update Email</h6>
                     </div>
                 </div>
                 <hr>
-                <form id='updateEmail' method='POST' action=""><!--{ url 'updateEmail' } -->
+                <form id='updateEmail' method='POST' action="">
+                    <!--{ url 'updateEmail' } -->
                     {% csrf_token %}
                     <input type="email" id="email" name="email" value="{{user.email}}">
                     <br>
@@ -52,7 +58,8 @@
                     </div>
                 </div>
                 <hr>
-                <form id='updatePassword' method='POST' action=""> <!-- { url 'updatePassword'%} -->
+                <form id='updatePassword' method='POST' action="">
+                    <!-- { url 'updatePassword'%} -->
                     {% csrf_token %}
                     <h6 class="mb-0"><label for="loginPassf">Current Password</label></h6>
                     <input type="password" class="form-control" id="loginPass" name="currentPassword">
@@ -61,6 +68,219 @@
                     <input type="password" class="form-control" id="loginPass" name="newPassword">
                     <br>
                     <button class="btn btn-secondary btn-sm" id="ChangePassword" type='button'>Submit </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body" id="updatePrefs">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6 class="mb-0" id="straight">Update Preferences</h6>
+                    </div>
+                </div>
+                <hr>
+                <form id='updatePrefs' method='POST' action="">
+                    {% csrf_token %}
+                    <h6 class="mb-0" id="straight">Skateboard type:</h6>
+                    <select name="board">
+                        {%if user.skateType == 2 %}
+                        <option value="2" selected>Any</option>
+                        <option value="1">Skateboard</option>
+                        <option value="3">Longboard</option>
+                        {%elif user.skateType == 1 %}
+                        <option value="2">Any</option>
+                        <option value="1"selected>Skateboard</option>
+                        <option value="3">Longboard</option>
+                        {%elif user.skateType == 3 %}
+                        <option value="2">Any</option>
+                        <option value="1">Skateboard</option>
+                        <option value="3"selected>Longboard</option>
+                        {%endif%}
+
+                    </select>
+
+                    <h6 class="mb-0" id="straight">Ramps</h6>
+                    {% if user.ramps %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="ramps" id="ry" value="1" checked>
+                        <label class="form-check-label" for="ry">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="ramps" id="rn" value="0">
+                        <label class="form-check-label" for="rn">No</label>
+
+                    </div>
+                    {%else%}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="ramps" id="ry" value="1">
+                        <label class="form-check-label" for="ry">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="ramps" id="rn" value="0"checked>
+                        <label class="form-check-label" for="rn">No</label>
+
+                    </div>
+                    {%endif%}
+
+
+                    <h6 class="mb-0" id="straight">Indoors</h6>
+                    {% if user.indoor %}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="indoors" id="iy" value="1" checked>
+                        <label for="iy">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="indoors" id="in" value="0">
+                        <label for="in">No</label>
+
+                    </div>
+                    {%else%}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="indoors" id="iy" value="1">
+                        <label for="iy">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="indoors" id="in" value="0" checked>
+                        <label for="in">No</label>
+
+                    </div>
+                    {%endif%}
+
+                    <h6 class="mb-0" id="straight">Paid</h6>
+                    {% if user.paid %}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="paid" id="py" value="1" checked>
+                        <label for="py">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="paid" id="pn" value="0">
+                        <label for="pn">No</label>
+
+                    </div>
+                    {%else%}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="paid" id="py" value="1">
+                        <label for="py">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="paid" id="pn" value="0" checked>
+                        <label for="pn">No</label>
+
+                    </div>
+                    {%endif%}
+
+
+                    <h6 class="mb-0" id="straight">Cruising</h6>
+                    {% if user.cruising %}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="cruising" id="cry" value="1" checked>
+                        <label for="cry">Cruising</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="cruising" id="crnn" value="0">
+                        <label for="crn">Trick Practice</label>
+
+                    </div>
+                    {%else%}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="cruising" id="cry" value="1">
+                        <label for="cry">Cruising</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="cruising" id="crnn" value="0" checked>
+                        <label for="crn">Trick Practice</label>
+
+                    </div>
+                    {%endif%}
+
+
+                    <h6 class="mb-0" id="straight">Concrete</h6>
+                    {% if user.concrete %}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="concrete" id="cy" value="1" checked>
+                        <label for="cy">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="concrete" id="cn" value="0">
+                        <label for="cn">No</label>
+
+                    </div>
+                    {%else%}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="concrete" id="cy" value="1">
+                        <label for="cy">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="concrete" id="cn" value="0" checked>
+                        <label for="cn">No</label>
+
+                    </div>
+                    {%endif%}
+
+
+                    <h6 class="mb-0" id="straight">Asphalt</h6>
+                    {% if user.asphalt %}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="asphalt" id="ay" value="1" checked>
+                        <label for="ay">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="asphalt" id="an" value="0">
+                        <label for="an">No</label>
+
+                    </div>
+                    {%else%}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="asphalt" id="ay" value="1">
+                        <label for="ay">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="asphalt" id="an" value="0" checked>
+                        <label for="an">No</label>
+
+                    </div>
+                    {%endif%}
+
+
+                    <h6 class="mb-0" id="straight">Wood</h6>
+                    {% if user.wood %}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="wood" id="wy" value="1" checked>
+                        <label for="wy">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="wood" id="wn" value="0">
+                        <label for="wn">No</label>
+
+                    </div>
+                    {%else%}
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="wood" id="wy" value="1">
+                        <label for="wy">Yes</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="wood" id="wn" value="0" checked>
+                        <label for="wn">No</label>
+
+                    </div>
+                    {%endif%}
+                    <br />
+                    <button class="btn btn-secondary btn-sm" id="updatePreferences" type='button'>Submit </button>
                 </form>
             </div>
         </div>

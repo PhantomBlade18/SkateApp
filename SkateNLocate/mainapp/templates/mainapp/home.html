@@ -6,6 +6,15 @@
     {%include "mainapp/map.html"%}
 
     {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6">
+            <input type="text" id="address" value="" class="form-control" />
+        </div>
+        <button id="search" class="btn btn-primary">Search</button>
+
+        <button id="nearMe" class="btn btn-primary">Near Me</button>
+
+    </div>
     <p> You are currently viewing:</p>
     <div id="focused-park">
 

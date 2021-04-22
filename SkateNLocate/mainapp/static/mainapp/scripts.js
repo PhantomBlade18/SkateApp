@@ -17,6 +17,7 @@ function initMap() {
 
     geocoder = new google.maps.Geocoder();
     $('#nearMe').trigger('click');
+    $('#MyRecos').trigger('click');
 }
 
 

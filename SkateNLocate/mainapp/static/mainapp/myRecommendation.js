@@ -1,4 +1,4 @@
-$('#nearMe').click(function () {
+$('#MyRecos').click(function () {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
             const pos = {

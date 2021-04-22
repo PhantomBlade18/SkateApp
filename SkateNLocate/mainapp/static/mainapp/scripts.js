@@ -28,11 +28,8 @@ function findAddress() {
     geocoder.geocode({ address: address, region: "uk" }, (results, status) => {
         if (status === 'OK') {
             map.setCenter(results[0].geometry.location);
-            console.log(results)
-            new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
+            //console.log(results)
+        
         }
         else {
             alert("Geocode was not succeessful. Reason: " + status);
@@ -40,29 +37,6 @@ function findAddress() {
     });
 }
 
-//function translates stored lat long coordinates into an address to help the user find park
-function geoCodeAddress(latlng) {
-     geocoder.geocode({ location: latlng}, (results, status) => {
-        if (status === 'OK') {
-            console.log(results[0])
-            ran = results[0].formatted_address;
-        }
-        else {
-            console.log("Geocode was not succeessful. Reason: " + status);
-        }
-    });
-}
-
-
-//homes in on users rough location based on coordinates provided
-
-
-
-
-//auto triggers specific button
-function test() {
-    $('#search').trigger('click');
-}
 
 $('#skateparks-list').on('click','.showMe',function () {
     var id = $(this).parent().attr("id")
@@ -83,7 +57,7 @@ $('#skateparks-list').on('click','.showMe',function () {
                 text += '<p id = "popularityScore">' + $(this).siblings('.row').children('#popularityScore').text() + '</p>';
                 text += '<p id = "avgScore">Average: ' + $(this).siblings('.row').children('#avgScore').text() + '</p>';
                 text += '<p id = "SurfaceScore">Surface: ' + $(this).siblings('.row').children('#SurfaceScore').text() + '</p>';
-                text += '<p id = "distance">Distance : ' + $(this).siblings('.row').children('#distance').text() + '</p>';
+                text += '<p id = "distance">Distance : ' + $(this).siblings('#distance').text() + '</p>';
                 $('#focused-park').append(text);
 
             } else {

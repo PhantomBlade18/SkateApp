@@ -84,7 +84,7 @@ $('#nearMe').click(function () {
                             title: obj[s].name,
                         });
                         marker.addListener("click", () => {
-                            infowindow.open(map, marker);
+                            infowindow.open(map,marker);
                         });
 
                     }

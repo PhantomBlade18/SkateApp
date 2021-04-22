@@ -139,19 +139,17 @@ def index(request):
     if 'username' in request.session:
         user = Member.objects.get(username = request.session['username'])
         context = {'user': user ,'loggedin': True}
-        spare() #quick test
+        
         return render(request,'mainapp/home.html',context)
     else:
-        spare()
+        
         return render(request,'mainapp/home.html')
 @loggedin
 def myRecommendations(request,user):
     if 'username' in request.session:
         context = {'user': user ,'loggedin': True}
-        spare() #quick test
         return render(request,'mainapp/recommendations.html',context)
     else:
-        spare()
         return render(request,'mainapp/login.html')
 
 @loggedin
@@ -239,26 +237,5 @@ def getRecommendations(request,user):
         context = { 'loggedin':False,'skateparks':df.to_json(orient = "records")}
 
     return JsonResponse(context, safe = False)
-    print(df.to_string())
-
-def spare(): #Code for algo
-    locs = Location.objects.all() 
-    df = read_frame(locs)
     
-    #print(df.to_string())
-    
-    mem = Member.objects.get(pk=1)
-    print(mem)
-    me = MemberSerializer(mem).data
 
-    print(get_skate_recommendations(df,me).to_string())
-    
-    locs = Location.objects.all() 
-    df = read_frame(locs)
-    loc = (51.548600,-0.367310)
-    df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
-
-    print(df.to_string())
-    #return HttpResponse("Hello World")
-
-    #Boop

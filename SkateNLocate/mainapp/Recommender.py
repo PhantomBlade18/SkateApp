@@ -33,4 +33,5 @@ def normalize_features(df):
         # fill any NaN's with the mean
         df[col] = df[col].fillna(df[col].mean())
         df[col] = StandardScaler().fit_transform(df[col].values.reshape(-1, 1))
+
     return df

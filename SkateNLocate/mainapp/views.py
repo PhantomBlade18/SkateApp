@@ -35,7 +35,7 @@ def signup(request):
 
 def registerUserView(request): 
     ''' adds new user to the database '''
-    if 'username' and 'password' and 'email' in request.POST:
+    if ('username' and 'password' and 'email' in request.POST) and not(len(request.POST['username'])==0 or len(request.POST['password'])==0 or len(request.POST['email'])== 0):
         u = request.POST['username']
         p = request.POST['password']
         e = request.POST['email']
@@ -50,7 +50,7 @@ def registerUserView(request):
         user = Member(username = u, email = e, ramps = ramps,indoor = indoor,paid = paid,cruising = cruising,asphalt = asphalt,concrete = concrete ,wood = wood,skateType = skateType)
         user.set_password(p)
         try: user.save()
-        except IntegrityError: raise Http404('Username ' +u+' already taken: Usernames must be unique')
+        except IntegrityError: return render(request,'mainapp/register.html',{'msg': "This username is already taken"})
         request.session['username'] = u
         request.session['password'] = p
         request.session['loggedin'] = True
@@ -58,22 +58,24 @@ def registerUserView(request):
         return HttpResponseRedirect(reverse('index'))
 
     else:
-        raise Http404('POST data missing')
+        context = {
+            'msg': "Please enter the username, email and password"
+            }
+        return render(request,'mainapp/register.html',context)
 
 def login(request):
     if  request.method == 'GET':
         return render(request,'mainapp/login.html')
-    elif not ('username' in request.POST and 'password' in request.POST) and request.method == 'POST':
+    elif not ('username' in request.POST or 'password' in request.POST) and request.method == 'POST' or (len(request.POST['username'])==0 or len(request.POST['password']) ==0):
         context = {
             'msg': "Please enter the username and password"
             }
-        data = json.dumps(context)
-        return JsonResponse(data)
+        return render(request,'mainapp/login.html',context)
     else:
         username = request.POST['username']
         password = request.POST['password']
         try: member = Member.objects.get(username=username)
-        except Member.DoesNotExist: raise Http404('User does not exist')
+        except Member.DoesNotExist: return render(request,'mainapp/login.html', context = {'msg': "Username or password is incorrect"})
         if member.check_password(password):
             # remember user in session variable
             request.session['username'] = username
@@ -82,7 +84,8 @@ def login(request):
             context = {'user': member ,'loggedin': True}
             return HttpResponseRedirect(reverse('index'))
         else:
-            raise Http404("Username or Password is Incorrect")
+            context = {'msg': "Username or password is incorrect"}
+            return render(request,'mainapp/login.html',context)
 
 @loggedin
 def logout(request, user):
@@ -144,6 +147,16 @@ def index(request):
     else:
         
         return render(request,'mainapp/home.html')
+
+def tutorial(request):
+    if 'username' in request.session:
+        user = Member.objects.get(username = request.session['username'])
+        context = {'user': user ,'loggedin': True}
+        
+        return render(request,'mainapp/tutorials.html',context)
+    else:
+        
+        return render(request,'mainapp/tutorials.html')
 @loggedin
 def myRecommendations(request,user):
     if 'username' in request.session:
@@ -178,7 +191,8 @@ def getNearestSkateparks(request):
             else:
                 context = { 'loggedin':False,'skateparks':df.to_json(orient = "records")}
             return JsonResponse(context, safe = False)
-            print("Return not performed")
+    else:
+        raise Http404("Something went wrong.")
 
 @loggedin
 def submitRating(request,user):
@@ -196,7 +210,7 @@ def submitRating(request,user):
                 user.calcRating()
                 user.save()
                 loc.save()
-                context = {'successful': True , 'msg': "Thank you for rating "+loc.name+"!"}
+                context = {'successful': True , 'msg': "Thank you for rating "+loc.name+"!",}
                 return JsonResponse(context,safe = False)
             else:
                 a = request.POST['avg']
@@ -211,26 +225,25 @@ def submitRating(request,user):
                 loc.save()
                 user.save()
                 
-                context = {'successful': True , 'msg': "Rating for "+loc.name+" has been updated. Thank you!"}
+                context = {'successful': True , 'msg': "Rating for "+loc.name+" has been updated. Thank you!", 'a':a,'s':s,'p':p}
                 return JsonResponse(context,safe = False)
-        else:
-            print("Missing something in post")
+  
     else:
         print("Wrong Method: ",request.method)
 
 
 @loggedin
 def getRecommendations(request,user):
-    locs = Location.objects.all() 
-    df = read_frame(locs)
     me = MemberSerializer(user).data
     #print(get_skate_recommendations(df,me).to_string())
     locs = Location.objects.all() 
     df = read_frame(locs)
     print("This is  the latitude :", request.POST['lat'])
     loc = (request.POST['lat'],request.POST['lng'])
+    df = get_skate_recommendations(df,me)
+    print(df.to_string())
     df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
-    #df = df[df['distance']<= 20]
+    df = df[df['distance']<= 50]
     if 'username' in request.session:
         context = { 'loggedin':True,'skateparks':df.to_json(orient = "records")}
     else:
@@ -238,4 +251,21 @@ def getRecommendations(request,user):
 
     return JsonResponse(context, safe = False)
     
+def spare(): #Code for algo
+    locs = Location.objects.all() 
+    df = read_frame(locs)
+    
+    #print(df.to_string())
+    
+    mem = Member.objects.get(pk=1)
+    print(mem)
+    me = MemberSerializer(mem).data
 
+    print(get_skate_recommendations(df,me).to_string())
+    
+    locs = Location.objects.all() 
+    df = read_frame(locs)
+    loc = (51.548600,-0.367310)
+    df['distance'] = df.apply(lambda row:distance.distance(loc,(row.lat,row.long)).km,axis = 1)
+
+    print(df.to_string())

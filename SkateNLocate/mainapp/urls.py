@@ -6,6 +6,7 @@ urlpatterns = [
     path('Nearby/',views.getNearestSkateparks,name='getSkateParks'),
     path('MyRecommendations/', views.myRecommendations, name='MyRecommendations'),
     path('MyRecommendations/Recommendations/',views.getRecommendations,name='Recommendations'),
+    path('MyRecommendations/submitRating/', views.submitRating, name='submitRating'),
     path('register/', views.signup, name='signup'),
     path('registerUser/', views.registerUserView, name = 'registerUserView'),
     path('login/', views.login, name='login'),
@@ -15,4 +16,5 @@ urlpatterns = [
     path('Profile/updatePassword/', views.updatePassword, name='updatePassword'),
     path('Profile/updatePreferences/', views.updatePrefs, name='updatePrefs'),
     path('submitRating/', views.submitRating, name='submitRating'),
+    path('tutorials/', views.tutorial, name='tutorial'),
     ]

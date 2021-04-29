@@ -27,13 +27,20 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
+                    {%if user %}
+                    <a class="nav-item nav-link">Welcome {{user.username}}</a>
+                    {%endif%}
                     <a class="nav-item nav-link" href="{% url 'index' %}">Home </a>
                     {%if loggedin%}
+
                     <a class="nav-item nav-link" href="{% url 'MyRecommendations' %}">My Recommendations</a>
                     <a class="nav-item nav-link" href="{% url 'viewProfile' %}">My Profile</a>
+                    <a class="nav-item nav-link" href="{% url 'tutorial' %} ">Tutorials</a>
                     <a class="nav-item nav-link" href="{% url 'logout' %} ">Log out</a>
 
+
                     {%else%}
+                    <a class="nav-item nav-link" href="{% url 'tutorial' %} ">Tutorials</a>
                     <a class="nav-item nav-link" href="{% url 'signup' %}">Sign Up</a>
                     <a class="nav-item nav-link" href="{% url 'login' %}">Log in</a>
                     {%endif%}

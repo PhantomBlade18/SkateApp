@@ -26,16 +26,22 @@ $('#search').click(findAddress)
 //searches for position, zooms to it and places down a marker
 function findAddress() {
     address = $('#address').val()
-    geocoder.geocode({ address: address, region: "uk" }, (results, status) => {
-        if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            //console.log(results)
-        
-        }
-        else {
-            alert("Geocode was not succeessful. Reason: " + status);
-        }
-    });
+    if (Object.keys(address).length === 0) {
+        alert("Please enter a location")
+    }
+    else {
+        geocoder.geocode({ address: address, region: "uk" }, (results, status) => {
+            if (status === 'OK') {
+                map.setCenter(results[0].geometry.location);
+                //console.log(results)
+                map.setZoom(12)
+            }
+            else {
+                alert("Geocode was not succeessful. Reason: " + status);
+            }
+        });
+    }
+    
 }
 
 
@@ -58,6 +64,7 @@ $('#skateparks-list').on('click','.showMe',function () {
                 text += '<p id = "popularityScore">' + $(this).siblings('.row').children('#popularityScore').text() + '</p>';
                 text += '<p id = "avgScore">Average: ' + $(this).siblings('.row').children('#avgScore').text() + '</p>';
                 text += '<p id = "SurfaceScore">Surface: ' + $(this).siblings('.row').children('#SurfaceScore').text() + '</p>';
+                text += $(this).siblings('#attributes').html();
                 text += '<p id = "distance">Distance : ' + $(this).siblings('#distance').text() + '</p>';
                 $('#focused-park').append(text);
 
@@ -122,6 +129,7 @@ $('#ChangeEmail').click(function (e) {
         success: function (data) {
             if (data['successful'] == true) {
                 alert(data['msg'])
+                $('#msg').text(data['msg'])
                 //$(this).parent().hide()
             }
             else {
@@ -146,6 +154,7 @@ $('#ChangePassword').click(function (e) {
         success: function (data) {
             if (data['successful'] == true) {
                 alert(data['msg'])
+                $('#msg').text(data['msg'])
                 //$(this).parent().hide()
             }
             else {
@@ -174,6 +183,7 @@ $('#updatePreferences').click(function (e) {
         success: function (data) {
             if (data['successful'] == true) {
                 alert(data['msg'])
+                $('#msg').text(data['msg'])
                 //$(this).parent().hide()
             }
             else {

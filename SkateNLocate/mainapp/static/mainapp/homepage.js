@@ -1,5 +1,8 @@
 $('#nearMe').click(function () {
     if (navigator.geolocation) {
+        let options = {
+            enableHighAccuracy: true,
+        } 
         navigator.geolocation.getCurrentPosition((position) => {
             const pos = {
                 lat: position.coords.latitude,
@@ -29,6 +32,43 @@ $('#nearMe').click(function () {
                             lat: obj[s].lat,
                             lng: obj[s].long
                         };
+                        var attributes = "";
+                        if (obj[s].ramps == 1) {
+                            attributes += "<li>Ramps</li>  "
+                        }
+                        if (obj[s].indoor == 1) {
+                            attributes += "<li>Indoors</li>  "
+                        }
+                        if (obj[s].paid == 1) {
+                            attributes += "<li>Paid</li>  "
+                        }
+                        else {
+                            attributes += "<li>Free</li>  "
+                        }
+                        if (obj[s].crusing == 1) {
+                            attributes += "<li>Cruising</li>  "
+                        }
+                        else {
+                            attributes += "<li>Tricks</li>  "
+                        }
+                        if (obj[s].asphalt == 1) {
+                            attributes += "<li>Asphalt</li>  "
+                        }
+                        if (obj[s].concrete == 1) {
+                            attributes += "<li>Concrete</li>  "
+                        }
+                        if (obj[s].wood == 1) {
+                            attributes += "<li>Wood</li>  "
+                        }
+                        if (obj[s].skateType == 1) {
+                            attributes += "<li>Skateboard</li>  "
+                        }
+                        else if (obj[s].skateType == 2) {
+                            attributes += "<li>Any</li>  "
+                        }
+                        else if (obj[s].skateType == 3) {
+                            attributes += "<li>Longboard</li> "
+                        }
 
                         //console.log(obj[s].name)
                         text = '<div id="' + obj[s].id + '" class="skatepark">'
@@ -36,10 +76,11 @@ $('#nearMe').click(function () {
 
                         text += '<input type="number" id="lat" hidden value=' + obj[s].lat + ' ><input type="number" id="lng" hidden value=' + obj[s].long + '>'
                         text += '<div class="row">'
-                        text += '<div class="col-3" id = "popularityScore"><p>Popularity: ' + obj[s].avgPopularity + '</p></div >'
-                        text += '<div class="col-3" id = "avgScore"><p >Average: ' + obj[s].avgRating + '</p></div >'
-                        text += '<div class="col-3" id = "SurfaceScore"><p >Surface: ' + obj[s].avgSurface + '</p></div >'
+                        text += '<div class="col-3" id = "popularityScore"><p>Popularity: ' + obj[s].avgPopularity.toFixed(2) + '</p></div >'
+                        text += '<div class="col-3" id = "avgScore"><p >Average: ' + obj[s].avgRating.toFixed(2) + '</p></div >'
+                        text += '<div class="col-3" id = "SurfaceScore"><p >Surface: ' + obj[s].avgSurface.toFixed(2) + '</p></div >'
                         text += '</div >'
+                        text += '<ul id = "attributes"> <b>Properties </b>'+ attributes + '</ul>'
                         text += '<p id = "distance">Distance : ' + obj[s].distance.toFixed(2) + ' km</p>'
                         text += '<a class="showMe btn btn-primary" href="#map"> Show me </a> \n'
                         if (log == true) {
@@ -87,13 +128,19 @@ $('#nearMe').click(function () {
                             infowindow.open(map,marker);
                         });
 
+
                     }
                     $('.rate-form').hide();
                 }
             })
-        })
+        },anError(),options)
     }
     else {
         alert("Browser does not support Location Tracking");
     }
 })
+
+
+function anError() {
+    console.log("An error has occurred")
+}

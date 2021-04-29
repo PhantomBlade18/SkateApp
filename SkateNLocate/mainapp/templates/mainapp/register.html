@@ -8,6 +8,9 @@
     {% csrf_token %}
     <div class="card mb-3">
         <div class="card-body">
+            {% if msg%}
+            <p class="text-danger"> {{msg}}</p>
+            {%endif%}
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input id="registerEmail" type="email" class="form-control" name="email">
